@@ -8,7 +8,7 @@
 import UIKit
 import CLImageEditor
 
-class ImageSelectViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ImageSelectViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CLImageEditorDelegate {
 
     @IBAction func handleLibraryButton(_ sender: Any) {
         //ライブラリ(カメラロール)を指定してピッカーを開く
@@ -35,6 +35,11 @@ class ImageSelectViewController: UIViewController, UIImagePickerControllerDelega
         self.dismiss(animated: true, completion: nil)
     }
     
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
     //写真を撮影・選択したときに呼ばれるメソッド
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if info[.originalImage] != nil {
@@ -43,7 +48,11 @@ class ImageSelectViewController: UIViewController, UIImagePickerControllerDelega
             
             //後でCLImageEdetorライブラリで加工する
             print("DEBUG_PRINT: image = \(image)")
-            
+            // CLImageEditorライブラリで加工する
+            let editor = CLImageEditor(image: image)!
+            editor.delegate = self
+            editor.modalPresentationStyle = .fullScreen
+            picker.present(editor, animated: true, completion: nil)
         }
     }
     
@@ -52,12 +61,19 @@ class ImageSelectViewController: UIViewController, UIImagePickerControllerDelega
         self.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-      
+    // CLImageEditorで加工が終わったときに呼ばれるメソッド
+    func imageEditor(_ editor: CLImageEditor!, didFinishEditingWith image: UIImage!) {
+        //投稿画面を開く
+        let postViewContrller = self.storyboard?.instantiateViewController(identifier: "Post") as! PostViewController
+        postViewContrller.image = image!
+        editor.present(postViewContrller, animated: true, completion: nil)
     }
     
-
+    //CLImageEditorの編集がキャンセルされたときに呼ばれるメソッド
+    func imageEditorDidCancel(_ editor: CLImageEditor!) {
+        //ImageSelectViewController画面を閉じてタブ画面に戻る
+        self.presentingViewController?.dismiss(animated: true, completion: nil)
+    }
+    
    
 }
