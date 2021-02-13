@@ -15,14 +15,20 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     //投稿データを格納する配列
     var postArray: [PostData] = []
     
+    //コメントデータを格納する配列
+    var textArray: [TextData] = []
+    
     //Firestoreのリスナー
     var listener: ListenerRegistration?
+    
+    //var listeners: ListenerRegistration?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.rowHeight = UITableView.automaticDimension
         
         //カスタムセルを登録する
         //UINibでxibファイルを読み込む
@@ -37,13 +43,17 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //ログイン済みか確認
         if Auth.auth().currentUser != nil {
             // listenerを登録して投稿データの更新を監視する
+            //投稿データを読み込むために、まずデータベースの参照場所と取得順序を指定したクエリを作成する
             let postsRef = Firestore.firestore().collection(Const.PostPath).order(by: "date", descending: true)
+//            let textsRef = Firestore.firestore().collection(Const.TextPath).order(by: "date", descending: true)
+            //addSnapshotListennerメソッドに指定したクロージャは投稿データが更新されたり、追加されたりするたびに呼ばれる
             listener = postsRef.addSnapshotListener() { (querySnapshot, error) in
                 if let error = error {
                     print("DEBUG_PRINT: snapshotの取得が失敗しました。\(error)")
                     return
                 }
                 //取得したdocumentを元にPostDateを作成し、postArrayの配列にする。
+                //querySnapshotに最新のデータが入っている
                 self.postArray = querySnapshot!.documents.map { document in
                     print("DEBUG_PRINT: document取得　\(document.documentID)")
                     let postData = PostData(document: document)
@@ -51,7 +61,21 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
                 //TableViewの表示を更新する
                 self.tableView.reloadData()
+
             }
+//            listeners = textsRef.addSnapshotListener() { (querySnapshot, error) in
+//                if let error = error {
+//                    print("DEBUG_PRINT: snapshotの取得が失敗しました。\(error)")
+//                    return
+//                }
+//                self.textArray = querySnapshot!.documents.map { document in
+//                    print("DEBUG_PRINT: document取得　\(document.documentID)")
+//                    let textData = TextData(document: document)
+//                    return textData
+//                }
+//                //TableViewの表示を更新する
+//                self.tableView.reloadData()
+//            }
         }
     }
     
@@ -67,13 +91,19 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return postArray.count
     }
     
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //セルを取得してデータを設定する
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! PostTableViewCell
         cell.setPostData(postArray[indexPath.row])
+        //cell.setTextData(textArray[indexPath.row])
         
         //セル内のボタンをアクションをソースコードで設定する
+        //コードでアクションを設定
         cell.likeButton.addTarget(self, action:#selector(handleButton(_:forEvent:)), for: .touchUpInside)
+        
+        //コメントのアクションを設定
+        cell.textButton.addTarget(self, action: #selector(texthandle(_:forEvent:)), for: .touchUpInside)
         
         return cell
     }
@@ -94,7 +124,7 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             //更新データを作成する
             var updateValue: FieldValue
             if postData.isLiked {
-                //すでにいいねを押した場合は、いいね解除のためmyidを取り除く更新データを作成
+                //すでにいいね_場合は、いいね解除のためmyidを取り除く更新データを作成
                 updateValue = FieldValue.arrayRemove([myid])
             } else {
                 //今回新たにいいねを押した場合は、myidを追加する更新データを作成
@@ -104,5 +134,17 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let postRef = Firestore.firestore().collection(Const.PostPath).document(postData.id)
             postRef.updateData(["likes": updateValue])
         }
+    }
+    
+    @objc func texthandle(_ sender: UIButton, forEvent event: UIEvent) {
+        print("DEBUG_PRINT: コメント追加ボタンがタップされました")
+        
+        //タップされたセルのインデックス
+//        let touch = event.allTouches?.first
+//        let point = touch!.location(in: self.tableView)
+//        let indexPath = tableView.indexPathForRow(at: point)
+        
+        let TextViewController = self.storyboard?.instantiateViewController(withIdentifier: "Text")
+        self.present(TextViewController!, animated: true, completion: nil)
     }
 }

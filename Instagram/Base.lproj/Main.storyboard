@@ -24,7 +24,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="emailAddress"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="パスワード" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HCp-0g-mrk">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="パスワード(6文字以上)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HCp-0g-mrk">
                                 <rect key="frame" x="57" y="168" width="300" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="Kbx-CI-53b"/>
@@ -172,6 +172,50 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0v9-Zp-k7D" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="56" y="815"/>
+        </scene>
+        <!--Text View Controller-->
+        <scene sceneID="KgP-X3-Xbr">
+            <objects>
+                <viewController storyboardIdentifier="Text" id="bZq-aP-crb" customClass="TextViewController" customModule="Instagram" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="M8D-W1-VHA">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ACD-sB-ZTe">
+                                <rect key="frame" x="57" y="258" width="300" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="R0C-f5-OZ6"/>
+                                </constraints>
+                                <state key="normal" title="コメントを追加" backgroundImage="btn"/>
+                                <connections>
+                                    <action selector="textButton:" destination="bZq-aP-crb" eventType="touchUpInside" id="gFk-Mg-Oj0"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="コメントを入力" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gm0-OP-any">
+                                <rect key="frame" x="57" y="194" width="300" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="kAk-UE-y9a"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="4oe-tT-I0q"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="gm0-OP-any" firstAttribute="centerX" secondItem="M8D-W1-VHA" secondAttribute="centerX" id="87a-up-TW2"/>
+                            <constraint firstItem="gm0-OP-any" firstAttribute="top" secondItem="4oe-tT-I0q" secondAttribute="top" constant="150" id="TmE-qT-uxs"/>
+                            <constraint firstItem="ACD-sB-ZTe" firstAttribute="top" secondItem="gm0-OP-any" secondAttribute="bottom" constant="30" id="ZZQ-Kv-ZWf"/>
+                            <constraint firstItem="ACD-sB-ZTe" firstAttribute="centerX" secondItem="M8D-W1-VHA" secondAttribute="centerX" id="aVk-LU-yJT"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="textField" destination="gm0-OP-any" id="R2A-jE-czJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9nP-Mq-e0u" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-789" y="1500"/>
         </scene>
         <!--Post View Controller-->
         <scene sceneID="0Zu-Af-ajx">

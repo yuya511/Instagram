@@ -39,7 +39,8 @@ class ImageSelectViewController: UIViewController, UIImagePickerControllerDelega
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
+
+    //デリゲートメソッド
     //写真を撮影・選択したときに呼ばれるメソッド
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if info[.originalImage] != nil {
@@ -48,6 +49,7 @@ class ImageSelectViewController: UIViewController, UIImagePickerControllerDelega
             
             //後でCLImageEdetorライブラリで加工する
             print("DEBUG_PRINT: image = \(image)")
+            
             // CLImageEditorライブラリで加工する
             let editor = CLImageEditor(image: image)!
             editor.delegate = self
@@ -56,6 +58,7 @@ class ImageSelectViewController: UIViewController, UIImagePickerControllerDelega
         }
     }
     
+    //デリゲートメソッド。キャンセルした時に呼ばれる
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         //ImageSelectViewController画面を閉じてタブ画面に戻る
         self.presentingViewController?.dismiss(animated: true, completion: nil)

@@ -26,6 +26,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     //第２引数に(viewControlle)に切り替え先のviewControllerインスタンスが入っている
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         //真ん中のカメラボタンが押されたかの判定
+        //is演算子右辺に値、左辺に型を取り合っていればtrueを返す
         if viewController is ImageSelectViewController {
             //ストーリボードのImageSelectViewControllerを読み込む
             let ImageSelectViewController = storyboard!.instantiateViewController(withIdentifier: "ImageSelect")

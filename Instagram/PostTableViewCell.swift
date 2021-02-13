@@ -13,8 +13,11 @@ class PostTableViewCell: UITableViewCell {
     @IBOutlet weak var postImageView: UIImageView!
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var likeLabel: UILabel!
-    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var detaLabel: UILabel!
     @IBOutlet weak var captionLabel: UILabel!
+    @IBOutlet weak var textButton: UIButton!
+
+    
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -30,7 +33,7 @@ class PostTableViewCell: UITableViewCell {
     //PostDataの内容をセルに表示
     func setPostData(_ postData: PostData) {
         //画像を表示
-        postImageView.sd_imageIndicator = SDWebImageActivityIndicator.gray//ダウンロード中のぐるぐる
+        postImageView.sd_imageIndicator = SDWebImageActivityIndicator.gray//ダウンロード中のぐるぐるプロパティ
         //Clooud Storageの画像の保存場所を指定
         let imageRef = Storage.storage().reference().child(Const.ImagePath).child(postData.id + ".jpg")
         //sd_setImageで表示できる
@@ -40,12 +43,12 @@ class PostTableViewCell: UITableViewCell {
         self.captionLabel.text = "\(postData.name!) : \(postData.caption!)"
         
         //日時の表示
-        self.dateLabel.text = ""
+        self.detaLabel.text = ""
         if let date = postData.date {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy-MM-dd HH:mm"
             let dateString = formatter.string(from: date)
-            self.dateLabel.text = dateString
+            self.detaLabel.text = dateString
         }
         
         //いいね数を表示
@@ -63,5 +66,9 @@ class PostTableViewCell: UITableViewCell {
             self.likeButton.setImage(buttonImage, for: .normal)
         }
     }
-    
+//    func setTextData(_ textData: TextData) {
+//        //キャプションの表示
+//        self.textlabel.text = "\(textData.name!) : \(textData.text!)"
+//    }
+
 }
