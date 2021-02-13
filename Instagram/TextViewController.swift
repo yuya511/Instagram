@@ -22,35 +22,22 @@ class TextViewController: UIViewController {
     }
     
     @IBAction func textButton(_ sender: Any) {
-        
-//        let textRef = Firestore.firestore().collection(Const.TextPath).document()
-//
-//        let name = Auth.auth().currentUser?.displayName
-//        let TextDic = [
-//            "name": name!,
-//            "text": self.textField.text!,
-//            "date": FieldValue.serverTimestamp(),//サバー上の時計を使用して日時を保存する指定
-//        ] as [String : Any]
-//        //辞書型の形にまとめてsetDataでFirestoreに保存できる
-//        textRef.setData(TextDic)
-//
-        //更新データを作成する
-        var updateValue: FieldValue
-        let name = Auth.auth().currentUser?.displayName
-        updateValue = FieldValue.arrayUnion(["\(name!):\(textField.text!)"])
-        //likesに更新データを書き込む
-        let postRef = Firestore.firestore().collection(Const.PostPath).document(row.id)
-        postRef.updateData(["text": updateValue])
-        
-        //コメントのデータを渡す
-        let HomeViewController = self.storyboard?.instantiateViewController(withIdentifier: "Home") as! HomeViewController
-        HomeViewController.texts = textField.text!
-        print("DEBUG_PRINT: コメントを追加しました")
-        SVProgressHUD.showSuccess(withStatus: "コメントを追加しました")
-        
-        
-        
-        self.dismiss(animated: true, completion: nil)
+        if textField.text!.isEmpty {
+            return
+        } else {
+            //更新データを作成する
+            var updateValue: FieldValue
+            let name = Auth.auth().currentUser?.displayName
+            updateValue = FieldValue.arrayUnion(["\(name!):\(textField.text!)"])
+            //likesに更新データを書き込む
+            let postRef = Firestore.firestore().collection(Const.PostPath).document(row.id)
+            postRef.updateData(["text": updateValue])
+            
+            print("DEBUG_PRINT: コメントを追加しました")
+            SVProgressHUD.showSuccess(withStatus: "コメントを追加しました")
+            
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     /*
