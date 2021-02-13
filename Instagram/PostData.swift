@@ -22,6 +22,7 @@ class PostData: NSObject {
     var likes: [String] = []
     //コメント
     var text: [String] = []
+
     //自分がいいねしているかのフラグ
     var isLiked: Bool = false
     
@@ -37,13 +38,14 @@ class PostData: NSObject {
         
         self.caption = postDic["caption"] as? String
         
+        
         let timestamp = postDic["date"] as? Timestamp
         self.date = timestamp?.dateValue()
         
         if let likes = postDic["likes"] as? [String] {
             self.likes = likes
         }
-        
+
         if let text = postDic["text"] as? [String] {
             self.text = text
         }

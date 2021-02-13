@@ -13,6 +13,8 @@ class TextViewController: UIViewController {
     
     @IBOutlet weak var textField: UITextField!
     
+    var row:PostData!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -32,6 +34,13 @@ class TextViewController: UIViewController {
 //        //辞書型の形にまとめてsetDataでFirestoreに保存できる
 //        textRef.setData(TextDic)
 //
+        //更新データを作成する
+        var updateValue: FieldValue
+        let name = Auth.auth().currentUser?.displayName
+        updateValue = FieldValue.arrayUnion(["\(name!):\(textField.text!)"])
+        //likesに更新データを書き込む
+        let postRef = Firestore.firestore().collection(Const.PostPath).document(row.id)
+        postRef.updateData(["text": updateValue])
         
         //コメントのデータを渡す
         let HomeViewController = self.storyboard?.instantiateViewController(withIdentifier: "Home") as! HomeViewController

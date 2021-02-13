@@ -63,6 +63,9 @@ class PostTableViewCell: UITableViewCell {
         let likeNumber = postData.likes.count
         likeLabel.text = "\(likeNumber)"
         
+        let str =  postData.text.joined(separator:"\n")
+        self.textlabel.text = str
+        
         //いいねボタンの表示
         //isLikedがあるかどうかで画像を変更
         if postData.isLiked {
