@@ -12,9 +12,9 @@ class TextData: NSObject {
     //投稿ID
     var id: String
     //投稿者名
-    var name: String?
+    var name: String = ""
     //コメントの追加
-    var text: String?
+    var text: String = ""
     //日付
     var date: Date?
     
@@ -25,8 +25,8 @@ class TextData: NSObject {
         let textDic = document.data()
         
         //↓辞書形式で取り出している
-        self.name = textDic["name"] as? String
-        self.text = textDic["text"] as? String
+//        self.name = textDic["name"] as? String
+//        self.text = textDic["text"] as? String
         let timestamp = textDic["date"] as? Timestamp
         self.date = timestamp?.dateValue()
         

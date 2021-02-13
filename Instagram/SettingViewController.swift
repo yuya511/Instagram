@@ -71,5 +71,3 @@ class SettingViewController: UIViewController {
 
 }
 
-
-//taro.kirameki@techacademy.jp

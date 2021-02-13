@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseUI
+import Firebase
 
 class PostTableViewCell: UITableViewCell {
 
@@ -16,12 +17,17 @@ class PostTableViewCell: UITableViewCell {
     @IBOutlet weak var detaLabel: UILabel!
     @IBOutlet weak var captionLabel: UILabel!
     @IBOutlet weak var textButton: UIButton!
-
+    @IBOutlet var textlabel: UILabel!
     
+    //Firestoreのリスナー
+    var listener: ListenerRegistration?
+        
+    var textData: TextData!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        //setTextData()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -29,6 +35,7 @@ class PostTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
     
     //PostDataの内容をセルに表示
     func setPostData(_ postData: PostData) {
@@ -66,9 +73,5 @@ class PostTableViewCell: UITableViewCell {
             self.likeButton.setImage(buttonImage, for: .normal)
         }
     }
-//    func setTextData(_ textData: TextData) {
-//        //キャプションの表示
-//        self.textlabel.text = "\(textData.name!) : \(textData.text!)"
-//    }
 
 }

@@ -15,13 +15,11 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     //投稿データを格納する配列
     var postArray: [PostData] = []
     
-    //コメントデータを格納する配列
-    var textArray: [TextData] = []
-    
+    var texts: String = ""
+   
     //Firestoreのリスナー
     var listener: ListenerRegistration?
     
-    //var listeners: ListenerRegistration?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +43,6 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             // listenerを登録して投稿データの更新を監視する
             //投稿データを読み込むために、まずデータベースの参照場所と取得順序を指定したクエリを作成する
             let postsRef = Firestore.firestore().collection(Const.PostPath).order(by: "date", descending: true)
-//            let textsRef = Firestore.firestore().collection(Const.TextPath).order(by: "date", descending: true)
             //addSnapshotListennerメソッドに指定したクロージャは投稿データが更新されたり、追加されたりするたびに呼ばれる
             listener = postsRef.addSnapshotListener() { (querySnapshot, error) in
                 if let error = error {
@@ -63,19 +60,6 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 self.tableView.reloadData()
 
             }
-//            listeners = textsRef.addSnapshotListener() { (querySnapshot, error) in
-//                if let error = error {
-//                    print("DEBUG_PRINT: snapshotの取得が失敗しました。\(error)")
-//                    return
-//                }
-//                self.textArray = querySnapshot!.documents.map { document in
-//                    print("DEBUG_PRINT: document取得　\(document.documentID)")
-//                    let textData = TextData(document: document)
-//                    return textData
-//                }
-//                //TableViewの表示を更新する
-//                self.tableView.reloadData()
-//            }
         }
     }
     
@@ -96,7 +80,8 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //セルを取得してデータを設定する
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! PostTableViewCell
         cell.setPostData(postArray[indexPath.row])
-        //cell.setTextData(textArray[indexPath.row])
+        
+       
         
         //セル内のボタンをアクションをソースコードで設定する
         //コードでアクションを設定
@@ -139,10 +124,24 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @objc func texthandle(_ sender: UIButton, forEvent event: UIEvent) {
         print("DEBUG_PRINT: コメント追加ボタンがタップされました")
         
-        //タップされたセルのインデックス
-//        let touch = event.allTouches?.first
-//        let point = touch!.location(in: self.tableView)
-//        let indexPath = tableView.indexPathForRow(at: point)
+        //タップされたセルのインデックスを求める
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = tableView.indexPathForRow(at: point)
+        
+        //配列からタップされたセルのインデックスのデータを取り出す
+        let postData = postArray[indexPath!.row]
+        
+        //コメントを更新する
+        if let text = Auth.auth().currentUser?.uid {
+            //更新データを作成する
+            var updateValue: FieldValue
+            let name = Auth.auth().currentUser?.displayName
+            updateValue = FieldValue.arrayUnion(["\(name!):\(texts)"])
+            //likesに更新データを書き込む
+            let postRef = Firestore.firestore().collection(Const.PostPath).document(postData.id)
+            postRef.updateData(["text": updateValue])
+        }
         
         let TextViewController = self.storyboard?.instantiateViewController(withIdentifier: "Text")
         self.present(TextViewController!, animated: true, completion: nil)

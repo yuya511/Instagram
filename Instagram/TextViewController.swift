@@ -21,17 +21,21 @@ class TextViewController: UIViewController {
     
     @IBAction func textButton(_ sender: Any) {
         
-        let textRef = Firestore.firestore().collection(Const.TextPath).document()
+//        let textRef = Firestore.firestore().collection(Const.TextPath).document()
+//
+//        let name = Auth.auth().currentUser?.displayName
+//        let TextDic = [
+//            "name": name!,
+//            "text": self.textField.text!,
+//            "date": FieldValue.serverTimestamp(),//サバー上の時計を使用して日時を保存する指定
+//        ] as [String : Any]
+//        //辞書型の形にまとめてsetDataでFirestoreに保存できる
+//        textRef.setData(TextDic)
+//
         
-        let name = Auth.auth().currentUser?.displayName
-        let TextDic = [
-            "name": name!,
-            "text": self.textField.text!,
-            "date": FieldValue.serverTimestamp(),//サバー上の時計を使用して日時を保存する指定
-        ] as [String : Any]
-        //辞書型の形にまとめてsetDataでFirestoreに保存できる
-        textRef.setData(TextDic)
-        
+        //コメントのデータを渡す
+        let HomeViewController = self.storyboard?.instantiateViewController(withIdentifier: "Home") as! HomeViewController
+        HomeViewController.texts = textField.text!
         print("DEBUG_PRINT: コメントを追加しました")
         SVProgressHUD.showSuccess(withStatus: "コメントを追加しました")
         

@@ -20,6 +20,8 @@ class PostData: NSObject {
     var date: Date?
     //いいねをした人のIDの配列
     var likes: [String] = []
+    //コメント
+    var text: [String] = []
     //自分がいいねしているかのフラグ
     var isLiked: Bool = false
     
@@ -41,6 +43,11 @@ class PostData: NSObject {
         if let likes = postDic["likes"] as? [String] {
             self.likes = likes
         }
+        
+        if let text = postDic["text"] as? [String] {
+            self.text = text
+        }
+        
         if let myid = Auth.auth().currentUser?.uid {
             //likesの配列のなかにmyidが含まれていないかチェックすることで、自分がいいねしているか判断
             if self.likes.firstIndex(of: myid) != nil {
